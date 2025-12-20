@@ -10,8 +10,8 @@ import argparse
 from typing import List, Dict
 
 # Konfiguracja
-REPO_OWNER = "marcin119a"
-REPO_NAME = "project_tools"
+REPO_OWNER = "codinglogistician"
+REPO_NAME = "project_tools_marcin"
 GITHUB_API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/issues"
 
 
