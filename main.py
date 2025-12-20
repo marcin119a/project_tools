@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from models.database import engine
-from routers import health
+from routers import health, hello
 
 
 @asynccontextmanager
@@ -25,6 +25,7 @@ app = FastAPI(
 
 # Include routers
 app.include_router(health.router, tags=["Health"])
+app.include_router(hello.router, tags=["Hello"])
 
 
 @app.get("/", response_model=dict)
