@@ -16,6 +16,7 @@
 - Rozdzielaj modele bazy danych (SQLAlchemy) od schematów odpowiedzi (Pydantic).
 - Każdy endpoint powinien mieć zdefiniowany `response_model`.
 - Pisz kod asynchroniczny (`async def`) tam, gdzie to możliwe.
+- Komentarze do kodu przygotuj po angielsku
 
 You are an expert in Python, FastAPI, and scalable API development.
 
