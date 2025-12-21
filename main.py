@@ -1,8 +1,9 @@
+import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from models.database import engine
-from routers import health, hello
+from routers import health, hello, location
 
 
 @asynccontextmanager
@@ -11,9 +12,18 @@ async def lifespan(app: FastAPI):
     from models.base import Base
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    
     yield
+    
     # Shutdown: Close database connections
-    await engine.dispose()
+    try:
+        await engine.dispose()
+    except asyncio.CancelledError:
+        # Ignoruj CancelledError podczas shutdown (normalne zachowanie uvicorn)
+        pass
+    except Exception:
+        # Ignoruj inne błędy podczas shutdown
+        pass
 
 
 app = FastAPI(
@@ -26,6 +36,7 @@ app = FastAPI(
 # Include routers
 app.include_router(health.router, tags=["Health"])
 app.include_router(hello.router, tags=["Hello"])
+app.include_router(location.router)
 
 
 @app.get("/", response_model=dict)
