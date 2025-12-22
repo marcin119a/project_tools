@@ -1,5 +1,7 @@
 # Project Tools API
 
+![CI](https://github.com/marcin119a/project_tools/actions/workflows/ci.yml/badge.svg)
+
 API for managing real estate listings and locations built with FastAPI, SQLAlchemy, and SQLite.
 
 ## 📋 Table of Contents

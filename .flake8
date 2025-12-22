@@ -1,0 +1,20 @@
+[flake8]
+# Flake8 configuration for FastAPI project
+max-line-length = 100
+exclude = 
+    .git,
+    __pycache__,
+    .pytest_cache,
+    .venv,
+    venv,
+    alembic,
+    .mypy_cache,
+ignore = 
+    W503,  # line break before binary operator
+    E203,  # whitespace before ':'
+    E501,  # line too long (handled by ruff)
+per-file-ignores =
+    __init__.py:F401,  # module imported but unused (used for re-exports)
+    tests/*:D,  # ignore docstring requirements in tests
+    conftest.py:F401,  # fixture imports
+
