@@ -8,10 +8,10 @@ from sqlalchemy import text
 from models.database import get_db
 from schemas.health import HealthResponse, HealthStatus
 
-router_api = APIRouter(prefix="/health",)
+router = APIRouter(prefix="/health")
 
 
-@router_api.get(
+@router.get(
     "/",
     response_model=HealthResponse,
     summary="Health check endpoint",
