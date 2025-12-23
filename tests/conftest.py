@@ -16,6 +16,7 @@ import os
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.pool import StaticPool
 from httpx import AsyncClient, ASGITransport
+from fastapi.testclient import TestClient
 
 from models.base import Base
 from models.database import get_db
@@ -120,4 +121,22 @@ async def test_client_no_db() -> AsyncGenerator[AsyncClient, None]:
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         yield client
+
+
+@pytest.fixture(scope="function")
+async def sync_test_client(override_get_db) -> TestClient:
+    """
+    Create a synchronous FastAPI TestClient with overridden database dependency.
+    Use this for testing API endpoints with FastAPI's TestClient.
+    
+    Note: TestClient is synchronous but works with async endpoints.
+    The fixture is async to ensure the test_session is properly set up.
+    """
+    app.dependency_overrides[get_db] = override_get_db
+    
+    client = TestClient(app)
+    yield client
+    
+    # Cleanup: remove dependency override after test
+    app.dependency_overrides.clear()
 

@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from datetime import date
 from decimal import Decimal
-from typing import List, Optional
+from typing import Optional
 
 from sqlalchemy import Column, Numeric, String, Boolean, Text, Date, SmallInteger, Integer
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Field, SQLModel
 
 
 class Location(SQLModel, table=True):
@@ -20,7 +20,7 @@ class Location(SQLModel, table=True):
     latitude: Optional[Decimal] = Field(default=None, sa_column=Column(Numeric(9, 6)))
     longitude: Optional[Decimal] = Field(default=None, sa_column=Column(Numeric(9, 6)))
 
-    listings: List["Listing"] = Relationship(back_populates="location")
+    # Relationships are omitted for simplicity and to avoid SQLAlchemy 2.0 typing issues.
 
 
 class Building(SQLModel, table=True):
@@ -31,7 +31,7 @@ class Building(SQLModel, table=True):
     building_type: Optional[str] = Field(default=None, sa_column=Column(String(100)))
     floor: Optional[int] = Field(default=None, sa_column=Column(SmallInteger))
 
-    listings: List["Listing"] = Relationship(back_populates="building")
+    # Relationship to listings is omitted.
 
 
 class Owner(SQLModel, table=True):
@@ -43,7 +43,7 @@ class Owner(SQLModel, table=True):
     contact_phone: Optional[str] = Field(default=None, sa_column=Column(String(50)))
     contact_email: Optional[str] = Field(default=None, sa_column=Column(String(255)))
 
-    listings: List["Listing"] = Relationship(back_populates="owner")
+    # Relationship to listings is omitted.
 
 
 class Features(SQLModel, table=True):
@@ -57,7 +57,7 @@ class Features(SQLModel, table=True):
     ownership_type: Optional[str] = Field(default=None, sa_column=Column(String(100)))
     equipment: Optional[str] = Field(default=None, sa_column=Column(Text))
 
-    listings: List["Listing"] = Relationship(back_populates="features")
+    # Relationship to listings is omitted.
 
 
 class Listing(SQLModel, table=True):
@@ -80,9 +80,4 @@ class Listing(SQLModel, table=True):
     url: Optional[str] = Field(default=None, sa_column=Column(Text))
     image_url: Optional[str] = Field(default=None, sa_column=Column(Text))
     description_text: Optional[str] = Field(default=None, sa_column=Column(Text))
-
-    location: Optional[Location] = Relationship(back_populates="listings")
-    building: Optional[Building] = Relationship(back_populates="listings")
-    owner: Optional[Owner] = Relationship(back_populates="listings")
-    features: Optional[Features] = Relationship(back_populates="listings")
 
