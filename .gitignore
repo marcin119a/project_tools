@@ -174,3 +174,4 @@ Desktop.ini
 sql_app.db
 *.db-journal
 
+.aider*

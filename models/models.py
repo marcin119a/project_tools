@@ -1,91 +1,88 @@
-from sqlalchemy import Column, Integer, String, Numeric, Boolean, Text, Date, SmallInteger, ForeignKey
-from sqlalchemy.orm import relationship
+from __future__ import annotations
 
-try:
-    from .base import Base
-except ImportError:
-    # Fallback for direct imports (e.g., Alembic)
-    from models.base import Base
+from datetime import date
+from decimal import Decimal
+from typing import List, Optional
+
+from sqlalchemy import Column, Numeric, String, Boolean, Text, Date, SmallInteger, Integer
+from sqlmodel import Field, Relationship, SQLModel
 
 
-class Location(Base):
+class Location(SQLModel, table=True):
     __tablename__ = "location"
 
-    location_id = Column(Integer, primary_key=True, autoincrement=True)
-    city = Column(String(255), nullable=True)
-    locality = Column(String(255), nullable=True)
-    city_district = Column(String(255), nullable=True)
-    street = Column(String(255), nullable=True)
-    full_address = Column(String(500), nullable=True)
-    latitude = Column(Numeric(9, 6), nullable=True)
-    longitude = Column(Numeric(9, 6), nullable=True)
+    location_id: Optional[int] = Field(default=None, primary_key=True)
+    city: Optional[str] = Field(default=None, sa_column=Column(String(255)))
+    locality: Optional[str] = Field(default=None, sa_column=Column(String(255)))
+    city_district: Optional[str] = Field(default=None, sa_column=Column(String(255)))
+    street: Optional[str] = Field(default=None, sa_column=Column(String(255)))
+    full_address: Optional[str] = Field(default=None, sa_column=Column(String(500)))
+    latitude: Optional[Decimal] = Field(default=None, sa_column=Column(Numeric(9, 6)))
+    longitude: Optional[Decimal] = Field(default=None, sa_column=Column(Numeric(9, 6)))
 
-    # Relationship
-    listings = relationship("Listing", back_populates="location")
+    listings: List["Listing"] = Relationship(back_populates="location")
 
 
-class Building(Base):
+class Building(SQLModel, table=True):
     __tablename__ = "building"
 
-    building_id = Column(Integer, primary_key=True, autoincrement=True)
-    year_built = Column(SmallInteger, nullable=True)
-    building_type = Column(String(100), nullable=True)
-    floor = Column(SmallInteger, nullable=True)
+    building_id: Optional[int] = Field(default=None, primary_key=True)
+    year_built: Optional[int] = Field(default=None, sa_column=Column(SmallInteger))
+    building_type: Optional[str] = Field(default=None, sa_column=Column(String(100)))
+    floor: Optional[int] = Field(default=None, sa_column=Column(SmallInteger))
 
-    # Relationship
-    listings = relationship("Listing", back_populates="building")
+    listings: List["Listing"] = Relationship(back_populates="building")
 
 
-class Owner(Base):
+class Owner(SQLModel, table=True):
     __tablename__ = "owner"
 
-    owner_id = Column(Integer, primary_key=True, autoincrement=True)
-    owner_type = Column(String(50), nullable=True)
-    contact_name = Column(String(255), nullable=True)
-    contact_phone = Column(String(50), nullable=True)
-    contact_email = Column(String(255), nullable=True)
+    owner_id: Optional[int] = Field(default=None, primary_key=True)
+    owner_type: Optional[str] = Field(default=None, sa_column=Column(String(50)))
+    contact_name: Optional[str] = Field(default=None, sa_column=Column(String(255)))
+    contact_phone: Optional[str] = Field(default=None, sa_column=Column(String(50)))
+    contact_email: Optional[str] = Field(default=None, sa_column=Column(String(255)))
 
-    # Relationship
-    listings = relationship("Listing", back_populates="owner")
+    listings: List["Listing"] = Relationship(back_populates="owner")
 
 
-class Features(Base):
+class Features(SQLModel, table=True):
     __tablename__ = "features"
 
-    features_id = Column(Integer, primary_key=True, autoincrement=True)
-    has_basement = Column(Boolean, nullable=True)
-    has_parking = Column(Boolean, nullable=True)
-    kitchen_type = Column(String(100), nullable=True)
-    window_type = Column(String(100), nullable=True)
-    ownership_type = Column(String(100), nullable=True)
-    equipment = Column(Text, nullable=True)
+    features_id: Optional[int] = Field(default=None, primary_key=True)
+    has_basement: Optional[bool] = Field(default=None, sa_column=Column(Boolean))
+    has_parking: Optional[bool] = Field(default=None, sa_column=Column(Boolean))
+    kitchen_type: Optional[str] = Field(default=None, sa_column=Column(String(100)))
+    window_type: Optional[str] = Field(default=None, sa_column=Column(String(100)))
+    ownership_type: Optional[str] = Field(default=None, sa_column=Column(String(100)))
+    equipment: Optional[str] = Field(default=None, sa_column=Column(Text))
 
-    # Relationship
-    listings = relationship("Listing", back_populates="features")
+    listings: List["Listing"] = Relationship(back_populates="features")
 
 
-class Listing(Base):
+class Listing(SQLModel, table=True):
     __tablename__ = "listing"
 
-    listing_id = Column(Integer, primary_key=True, autoincrement=True)
-    location_id = Column(Integer, ForeignKey("location.location_id"), nullable=False)
-    building_id = Column(Integer, ForeignKey("building.building_id"), nullable=False)
-    owner_id = Column(Integer, ForeignKey("owner.owner_id"), nullable=False)
-    features_id = Column(Integer, ForeignKey("features.features_id"), nullable=False)
-    rooms = Column(SmallInteger, nullable=True)
-    area = Column(Numeric(6, 2), nullable=True)
-    price_total_zl = Column(Numeric(12, 2), nullable=True)
-    price_sqm_zl = Column(Numeric(12, 2), nullable=True)
-    price_per_sqm_detailed = Column(Numeric(12, 2), nullable=True)
-    date_posted = Column(Date, nullable=True)
-    photo_count = Column(Integer, nullable=True)
-    url = Column(Text, nullable=True)
-    image_url = Column(Text, nullable=True)
-    description_text = Column(Text, nullable=True)
+    listing_id: Optional[int] = Field(default=None, primary_key=True)
+    location_id: int = Field(foreign_key="location.location_id")
+    building_id: int = Field(foreign_key="building.building_id")
+    owner_id: int = Field(foreign_key="owner.owner_id")
+    features_id: int = Field(foreign_key="features.features_id")
+    rooms: Optional[int] = Field(default=None, sa_column=Column(SmallInteger))
+    area: Optional[Decimal] = Field(default=None, sa_column=Column(Numeric(6, 2)))
+    price_total_zl: Optional[Decimal] = Field(default=None, sa_column=Column(Numeric(12, 2)))
+    price_sqm_zl: Optional[Decimal] = Field(default=None, sa_column=Column(Numeric(12, 2)))
+    price_per_sqm_detailed: Optional[Decimal] = Field(
+        default=None, sa_column=Column(Numeric(12, 2))
+    )
+    date_posted: Optional[date] = Field(default=None, sa_column=Column(Date))
+    photo_count: Optional[int] = Field(default=None, sa_column=Column(Integer))
+    url: Optional[str] = Field(default=None, sa_column=Column(Text))
+    image_url: Optional[str] = Field(default=None, sa_column=Column(Text))
+    description_text: Optional[str] = Field(default=None, sa_column=Column(Text))
 
-    # Relationships
-    location = relationship("Location", back_populates="listings")
-    building = relationship("Building", back_populates="listings")
-    owner = relationship("Owner", back_populates="listings")
-    features = relationship("Features", back_populates="listings")
+    location: Optional[Location] = Relationship(back_populates="listings")
+    building: Optional[Building] = Relationship(back_populates="listings")
+    owner: Optional[Owner] = Relationship(back_populates="listings")
+    features: Optional[Features] = Relationship(back_populates="listings")
 
