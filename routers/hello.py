@@ -6,20 +6,36 @@ router = APIRouter()
 
 
 @router.get(
+    "/hello",
+    response_model=HelloResponse,
+    summary="Hello World",
+    description="Returns classic Hello World message",
+)
+async def hello_world() -> HelloResponse:
+    """
+    Endpoint that returns a classic Hello World message.
+    
+    Returns:
+        HelloResponse: Hello World message
+    """
+    return HelloResponse(message="Hello World")
+
+
+@router.get(
     "/hello/{name}",
     response_model=HelloResponse,
-    summary="Spersonalizowane powitanie",
-    description="Zwraca spersonalizowane powitanie dla podanego imienia",
+    summary="Personalized greeting",
+    description="Returns a personalized greeting for the given name",
 )
 async def hello(name: str) -> HelloResponse:
     """
-    Endpoint zwracający spersonalizowane powitanie.
+    Endpoint that returns a personalized greeting.
     
     Args:
-        name: Imię użytkownika do powitania
+        name: User's name for greeting
     
     Returns:
-        HelloResponse: Komunikat powitalny z imieniem
+        HelloResponse: Greeting message with the name
     """
     return HelloResponse(message=f"Hello {name}")
 

@@ -5,6 +5,7 @@
 - Database: SQLite.
 - ORM: SQLAlchemy (asynchronicznie).
 - Validation: Pydantic v2.
+- Tests: Pytest
 
 ## Database (SQLite) specific
 - Zawsze używaj "sqlite://./sql_app.db" jako domyślnego połączenia dla środowiska deweloperskiego.
@@ -17,6 +18,7 @@
 - Każdy endpoint powinien mieć zdefiniowany `response_model`.
 - Pisz kod asynchroniczny (`async def`) tam, gdzie to możliwe.
 - Komentarze do kodu przygotuj po angielsku
+- Testy są pisane w Pytest
 
 You are an expert in Python, FastAPI, and scalable API development.
 

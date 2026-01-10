@@ -9,8 +9,8 @@ from decimal import Decimal, InvalidOperation
 from typing import Optional, Dict, Any
 import asyncio
 
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 
 from models.database import async_session_maker
 from models.models import Location, Building, Owner, Features, Listing

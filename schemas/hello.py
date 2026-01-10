@@ -1,14 +1,15 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class HelloResponse(BaseModel):
     """Odpowiedź z endpointu hello"""
-    message: str = Field(..., description="Spersonalizowany komunikat powitalny")
-
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "message": "Hello John",
             }
         }
+    )
+    
+    message: str = Field(..., description="Spersonalizowany komunikat powitalny")
 
